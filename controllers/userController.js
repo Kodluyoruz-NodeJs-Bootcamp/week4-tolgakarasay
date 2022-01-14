@@ -4,15 +4,15 @@ const jwt = require('jsonwebtoken');
 
 exports.registerUser = async (req, res) => {
   try {
-    // Get user input
+    // Get user credentials
     const { name, surname, username, password } = req.body;
 
-    // Validate user input
+    // Validate user credentials
     if (!(username && password && name && surname)) {
       res.status(400).send('All input is required');
     }
 
-    // check if user already exist
+    // Check if user already exists
     // Validate if user exist in our database
     const oldUser = await User.findOne({ username });
 
@@ -20,7 +20,7 @@ exports.registerUser = async (req, res) => {
       return res.status(409).send('User Already Exist. Please Login');
     }
 
-    //Encrypt user password
+    // Encrypt user password
     encryptedPassword = await bcrypt.hash(password, 10);
 
     // Create user in our database
@@ -77,13 +77,12 @@ exports.checkUser = async (req, res) => {
       req.session.userID = user._id;
       req.session.browser = req.headers['user-agent'];
 
-      // save session to DB
-
       // set cookie
       res.cookie('access_token', token, {
         httpOnly: true,
       });
 
+      // Route authenticated user to welcome page
       return res.status(200).render('welcome', { user });
     } else {
       res.status(400).send('Invalid Credentials');
@@ -95,7 +94,6 @@ exports.checkUser = async (req, res) => {
 
 exports.listUsers = async (req, res) => {
   const users = await User.find();
-
   res.render('userlist', { users });
 };
 
