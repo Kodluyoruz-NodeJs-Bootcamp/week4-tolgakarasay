@@ -27,7 +27,7 @@ exports.registerUser = async (req, res) => {
     const user = await User.create({
       name,
       surname,
-      username: username.toLowerCase(), // sanitize: convert username to lowercase
+      username: username,
       password: encryptedPassword,
     });
 
