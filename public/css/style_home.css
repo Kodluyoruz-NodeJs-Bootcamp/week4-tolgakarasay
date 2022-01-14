@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css?family=Ubuntu&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: #000000;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Setting the rules for header */
+
+header {
+  position: fixed;
+  top: 0;
+  z-index: 1;
+  margin: 0;
+  height: 8vh;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #74ebd5; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #43cea2,
+    #185a9d
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #43cea2,
+    #185a9d
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  box-shadow: rgba(69, 69, 77, 0.2) 0px 7px 29px 0px;
+}
+#logo-link {
+  margin-left: 15%;
+  transition: all 0.3s ease 0s;
+}
+
+#logo-link:hover {
+  filter: invert(100%);
+}
+
+#header-img {
+  width: 30px;
+}
+nav {
+  margin-right: 15%;
+}
+nav li {
+  list-style: none;
+  display: inline;
+}
+nav li a {
+  color: #ffffff;
+  text-decoration: none;
+  text-align: left;
+  margin-left: 3vw;
+  transition: all 0.5s ease 0s;
+}
+nav li a:hover {
+  background-color: rgba(255, 251, 0, 0.568);
+}
+
+/*Setting the rules for main part*/
+
+body {
+  background: #74ebd5; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #43cea2,
+    #185a9d
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #43cea2,
+    #185a9d
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+#main-textbox h1 {
+  font-size: 4vw;
+  color: #ffffff;
+}
+
+#main-textbox li {
+  word-wrap: break-word;
+  margin-top: 1%;
+  font-size: 18px;
+  color: #ffffff;
+}
+
+#main-textbox ul,
+#main-textbox p {
+  font-size: 18px;
+  margin-top: 3%;
+  color: #ffffff;
+}
+
+main {
+  padding-top: 10vh;
+  margin: 5% 15%;
+}

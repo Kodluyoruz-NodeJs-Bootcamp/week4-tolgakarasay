@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Homepage</title>
+    <link rel="stylesheet" href="css/style_home.css" />
+</head>
+
+<body>
+
+    <%- include('partials/_navigation') -%>
+
+        <!-- Main page-->
+        <main id="main">
+            <div id="main-grid">
+                <section id="main-textbox">
+                    <h1>Welcome <%= user.name %>! You have succesfully logged in.</h1>
+                    <p>
+                        Please find your user info below:
+                    </p>
+                    <p>
+                    <ul>
+                        <li>name : <%= user.name %>
+                        </li>
+                        <li>surname : <%= user.surname %>
+                        </li>
+                        <li>username : <%= user.username %>
+                        </li>
+                        <li>token : <%= user.token %>
+                        </li>
+                    </ul>
+
+                    </p>
+                </section>
+            </div>
+        </main>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sign up</title>
+    <link rel="stylesheet" href="css/style_login.css">
+</head>
+
+<body>
+    <main>
+        <form action="/register" method="post">
+            <h2>sign up</h2>
+            <div class="input-field">
+                <input type="text" name="name" placeholder="Enter your name" required>
+            </div>
+            <div class="input-field">
+                <input type="text" name="surname" placeholder="Enter your surname" required>
+            </div>
+            <div class="input-field">
+                <input type="text" name="username" placeholder="Enter your username" required>
+            </div>
+            <div class="input-field">
+                <input type="text" name="password" placeholder="Enter your password" required>
+            </div>
+            <div>
+                <p class="login-signup-advice">Do you have an account? <span><a class="link" id="login-link"
+                            href="login">Login</a></span>
+                </p>
+            </div>
+            <input type="submit" value="sign up">
+        </form>
+    </main>
+</body>
+
+</html>

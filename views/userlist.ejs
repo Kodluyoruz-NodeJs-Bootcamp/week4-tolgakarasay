@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Homepage</title>
+    <link rel="stylesheet" href="css/style_home.css" />
+</head>
+
+<body>
+
+    <%- include('partials/_navigation') -%>
+
+        <!-- Main page-->
+        <main id="main">
+            <div id="main-grid">
+                <section id="main-textbox">
+                    <h1>Users in the database:</h1>
+
+                    <ul>
+                        <% for(let i=0; i<users.length; i++){ %>
+                            <li>
+                                <%= users[i].username %> (<%= users[i].name %>
+                                        <%= users[i].surname %>)
+                            </li>
+                            <% } %>
+                    </ul>
+                </section>
+            </div>
+        </main>

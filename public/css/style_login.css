@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+body {
+  display: block;
+  background: #74ebd5; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #b2ccc4,
+    #b9c6d4
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #b2ccc4,
+    #b9c6d4
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  font-family: Roboto, sans-serif;
+}
+
+body header h2 {
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  background: #74ebd5; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #b2ccc4,
+    #b9c6d4
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #b2ccc4,
+    #b9c6d4
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  font-family: Roboto, sans-serif;
+}
+
+form {
+  background-color: white;
+  margin: 1%;
+  padding: 3%;
+  border-radius: 3vw;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.input-field {
+  position: relative;
+  margin-top: 1rem;
+}
+
+.input-field input {
+  padding: 1rem;
+}
+
+form .input-field:first-child {
+  margin-bottom: 1.5rem;
+}
+
+form input[type='submit'] {
+  background-color: rgb(38, 130, 216);
+  color: white;
+  border-radius: 4px;
+  margin-top: 1rem;
+  padding: 0.4rem;
+  width: 100%;
+}
+
+.login-signup-advice {
+  font-size: 0.8em;
+}
