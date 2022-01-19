@@ -14,7 +14,7 @@ export const registerUser: RequestHandler = async (req, res) => {
   try {
     // Get user credentials
     const { name, surname, username, password } = req.body;
-    console.log(req.body);
+
     // Validate user credentials
     if (!(username && password && name && surname)) {
       res.status(400).send('All input is required');
@@ -38,15 +38,6 @@ export const registerUser: RequestHandler = async (req, res) => {
       username: username,
       password: encryptedPassword,
     });
-
-    // Create token
-    const token = jwt.sign(
-      { user_id: user._id, username },
-      process.env.TOKEN_KEY,
-      {
-        expiresIn: '2h',
-      }
-    );
 
     // redirect new user to login page
     const str = `You have been succesfully registered. Please login.`;
