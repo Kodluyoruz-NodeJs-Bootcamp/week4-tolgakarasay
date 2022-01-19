@@ -13,16 +13,16 @@ declare module 'express-session' {
 export const registerUser: RequestHandler = async (req, res) => {
   try {
     // Get user credentials
-    const { name, surname, email, password } = req.body;
-
+    const { name, surname, username, password } = req.body;
+    console.log(req.body);
     // Validate user credentials
-    if (!(email && password && name && surname)) {
+    if (!(username && password && name && surname)) {
       res.status(400).send('All input is required');
     }
 
     // Check if user already exists
     // Validate if user exist in our database
-    const oldUser = await User.findOne({ email });
+    const oldUser = await User.findOne({ username });
 
     if (oldUser) {
       return res.status(409).send('User Already Exist. Please Login');
@@ -35,20 +35,18 @@ export const registerUser: RequestHandler = async (req, res) => {
     const user = await User.create({
       name,
       surname,
-      email: email,
+      username: username,
       password: encryptedPassword,
     });
 
-    /*
     // Create token
     const token = jwt.sign(
-      { user_id: user._id, email },
+      { user_id: user._id, username },
       process.env.TOKEN_KEY,
       {
         expiresIn: '2h',
       }
     );
-    */
 
     // redirect new user to login page
     const str = `You have been succesfully registered. Please login.`;
