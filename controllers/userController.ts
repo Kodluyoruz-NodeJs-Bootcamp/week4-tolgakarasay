@@ -1,54 +1,64 @@
-const User = require('../models/User');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+import User from '../models/User';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { RequestHandler } from 'express';
 
-exports.registerUser = async (req, res) => {
+declare module 'express-session' {
+  interface Session {
+    browser: String;
+    userID: String;
+  }
+}
+
+export const registerUser: RequestHandler = async (req, res) => {
   try {
     // Get user credentials
-    const { name, surname, username, password } = req.body;
+    const { name, surname, email, password } = req.body;
 
     // Validate user credentials
-    if (!(username && password && name && surname)) {
+    if (!(email && password && name && surname)) {
       res.status(400).send('All input is required');
     }
 
     // Check if user already exists
     // Validate if user exist in our database
-    const oldUser = await User.findOne({ username });
+    const oldUser = await User.findOne({ email });
 
     if (oldUser) {
       return res.status(409).send('User Already Exist. Please Login');
     }
 
     // Encrypt user password
-    encryptedPassword = await bcrypt.hash(password, 10);
+    const encryptedPassword = await bcrypt.hash(password, 10);
 
     // Create user in our database
     const user = await User.create({
       name,
       surname,
-      username: username,
+      email: email,
       password: encryptedPassword,
     });
 
+    /*
     // Create token
     const token = jwt.sign(
-      { user_id: user._id, username },
+      { user_id: user._id, email },
       process.env.TOKEN_KEY,
       {
         expiresIn: '2h',
       }
     );
+    */
 
     // redirect new user to login page
     const str = `You have been succesfully registered. Please login.`;
-    res.status(201).render('login', { str });
+    return res.status(201).render('login', { str });
   } catch (err) {
     console.log(err);
   }
 };
 
-exports.checkUser = async (req, res) => {
+export const checkUser: RequestHandler = async (req, res) => {
   try {
     // Get user input
     const { username, password } = req.body;
@@ -74,6 +84,7 @@ exports.checkUser = async (req, res) => {
       user.token = token;
 
       // user session
+
       req.session.userID = user._id;
       req.session.browser = req.headers['user-agent'];
 
@@ -92,12 +103,17 @@ exports.checkUser = async (req, res) => {
   }
 };
 
-exports.listUsers = async (req, res) => {
+export const listUsers: RequestHandler = async (req, res) => {
   const users = await User.find();
   res.render('userlist', { users });
 };
 
-exports.logoutUser = (req, res) => {
-  req.session.destroy();
-  res.redirect('/login');
+export const logoutUser: RequestHandler = (req, res) => {
+  req.session.destroy(function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect('/login');
+    }
+  });
 };

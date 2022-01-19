@@ -1,11 +1,11 @@
 // MODULES
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const session = require('express-session');
-const ejs = require('ejs');
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import session from 'express-session';
+import ejs from 'ejs';
 const MongoDBStore = require('connect-mongodb-session')(session);
-const pageRoute = require('./routes/pageRoute');
-const userRoute = require('./routes/userRoute');
+const pageRoute = require('./routes/pageRoute').default;
+import userRoute from './routes/userRoute';
 
 const app = express();
 require('dotenv').config();

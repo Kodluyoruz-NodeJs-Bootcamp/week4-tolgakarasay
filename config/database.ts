@@ -1,7 +1,7 @@
 // DB CONNECTION
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-exports.connect = () => {
+export const connect = () => {
   mongoose
     .connect(process.env.MONGO_URI)
     .then(() => {

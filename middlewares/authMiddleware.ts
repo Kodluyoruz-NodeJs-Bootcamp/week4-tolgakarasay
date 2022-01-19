@@ -1,7 +1,22 @@
-const jwt = require('jsonwebtoken');
+import { RequestHandler } from 'express';
+import * as jwt from 'jsonwebtoken';
 const config = process.env;
+import jwtDecode from 'jwt-decode';
 
-const verifyToken = (req, res, next) => {
+interface MyToken {
+  id: string;
+  browser: string;
+  // whatever else is in the JWT.
+}
+
+declare module 'express-session' {
+  interface Session {
+    browser: String;
+    userID: String;
+  }
+}
+
+const verifyToken: RequestHandler = (req, res, next) => {
   const token = req.cookies.access_token;
 
   if (!token) {
@@ -10,7 +25,8 @@ const verifyToken = (req, res, next) => {
       .render('login', { str: 'Token not found! Login to gain access.' });
   }
   try {
-    const decoded = jwt.verify(token, config.TOKEN_KEY);
+    const decoded = jwtDecode<MyToken>(token);
+
     if (
       decoded.id == req.session.userID &&
       decoded.browser == req.headers['user-agent']
@@ -28,4 +44,4 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-module.exports = verifyToken;
+export default verifyToken;
