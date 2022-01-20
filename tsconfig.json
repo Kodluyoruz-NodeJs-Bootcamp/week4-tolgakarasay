@@ -12,6 +12,6 @@
       "*": ["node_modules/*", "*"]
     }
   },
-  "include": ["*"],
-  "files": ["types/custom.d.ts"]
+  "include": ["*"]
+  //"files": ["types/custom.d.ts"]
 }
