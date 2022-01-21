@@ -57,3 +57,5 @@ or with ts-node.
 ```
 npx ts-node app.ts
 ```
+
+https://user-images.githubusercontent.com/49616302/150555634-7c8d5a15-15b0-4ebd-9924-2bb0a59b5487.mp4
