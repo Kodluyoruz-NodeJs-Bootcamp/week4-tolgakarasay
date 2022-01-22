@@ -27,7 +27,7 @@ export const registerUser: RequestHandler = async (req, res) => {
     const oldUser = await User.findOne({ username });
 
     if (oldUser) {
-      return res.status(409).send('User Already Exist. Please Login');
+      return res.status(409).render('signup', { str: 'User already exists!' });
     }
 
     // Encrypt user password
@@ -42,8 +42,9 @@ export const registerUser: RequestHandler = async (req, res) => {
     });
 
     // redirect new user to login page
-    const str = `You have been succesfully registered. Please login.`;
-    return res.status(201).render('login', { str });
+    return res.status(201).render('login', {
+      str: 'You have been succesfully registered. Please login.',
+    });
   } catch (err) {
     console.log(err);
   }
@@ -87,7 +88,7 @@ export const checkUser: RequestHandler = async (req, res) => {
       // Route authenticated user to welcome page
       return res.status(200).render('welcome', { user });
     } else {
-      res.status(400).send('Invalid Credentials');
+      res.status(400).render('login', { str: 'Invalid credentials!' });
     }
   } catch (err) {
     console.log(err);
