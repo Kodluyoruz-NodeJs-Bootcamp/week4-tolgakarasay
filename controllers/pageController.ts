@@ -17,5 +17,5 @@ export const getLoginPage: RequestHandler = (req, res) => {
 
 // render signup page
 export const getSignupPage: RequestHandler = (req, res) => {
-  res.render('signup');
+  res.render('signup', { str: '' });
 };
