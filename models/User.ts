@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
+// Define the schema
 const userSchema = new Schema({
   name: { type: String, required: true },
   surname: { type: String, required: true },
@@ -12,6 +13,6 @@ const userSchema = new Schema({
     default: Date.now,
   },
 });
-
+// Define the model
 const User = mongoose.model('User', userSchema);
 export default User;

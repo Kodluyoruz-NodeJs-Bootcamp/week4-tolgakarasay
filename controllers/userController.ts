@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { RequestHandler } from 'express';
 
+// Add extra variables to express session
 declare module 'express-session' {
   interface Session {
     browser: String;
@@ -10,6 +11,7 @@ declare module 'express-session' {
   }
 }
 
+// This function is invoked to register a new user
 export const registerUser: RequestHandler = async (req, res) => {
   try {
     // Get user credentials
@@ -47,20 +49,21 @@ export const registerUser: RequestHandler = async (req, res) => {
   }
 };
 
+// this function is invoked when user tries to login
 export const checkUser: RequestHandler = async (req, res) => {
   try {
-    // Get user input
+    // Get user input at login page
     const { username, password } = req.body;
 
     // Validate user input
     if (!(username && password)) {
       res.status(400).send('All input is required');
     }
-    // Validate if user exist in our database
+    // Validate if user exists in the database
     const user = await User.findOne({ username });
 
+    // If user exists and password matches, create token
     if (user && (await bcrypt.compare(password, user.password))) {
-      // Create token
       const token = jwt.sign(
         { id: user._id, browser: req.headers['user-agent'] },
         process.env.TOKEN_KEY,
@@ -73,7 +76,6 @@ export const checkUser: RequestHandler = async (req, res) => {
       user.token = token;
 
       // user session
-
       req.session.userID = user._id;
       req.session.browser = req.headers['user-agent'];
 
@@ -92,11 +94,13 @@ export const checkUser: RequestHandler = async (req, res) => {
   }
 };
 
+// this function is invoked to list all users in the database
 export const listUsers: RequestHandler = async (req, res) => {
   const users = await User.find();
   res.render('userlist', { users });
 };
 
+// this function is invoked when user clicks on logout button.
 export const logoutUser: RequestHandler = (req, res) => {
   req.session.destroy(function (err) {
     if (err) {

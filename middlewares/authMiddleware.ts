@@ -1,14 +1,14 @@
 import { RequestHandler } from 'express';
-import * as jwt from 'jsonwebtoken';
-const config = process.env;
 import jwtDecode from 'jwt-decode';
+const config = process.env;
 
+// define an interface for decoded token
 interface MyToken {
   id: string;
   browser: string;
-  // whatever else is in the JWT.
 }
 
+// add new parameters to session
 declare module 'express-session' {
   interface Session {
     browser: String;
@@ -16,17 +16,21 @@ declare module 'express-session' {
   }
 }
 
+// this middleware function is invoked to authenticate the user
 const verifyToken: RequestHandler = (req, res, next) => {
   const token = req.cookies.access_token;
 
+  // check if there is a token in the cookie
   if (!token) {
     return res
       .status(403)
       .render('login', { str: 'Token not found! Login to gain access.' });
   }
   try {
+    // Decode the token
     const decoded = jwtDecode<MyToken>(token);
 
+    // Check if cookie's id and browser info match with session's.
     if (
       decoded.id == req.session.userID &&
       decoded.browser == req.headers['user-agent']
