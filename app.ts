@@ -42,7 +42,7 @@ app.use(
 
 // ROUTES
 app.use('/', pageRoute);
-app.use('/users', userRoute);
+app.use('/', userRoute);
 
 // START THE SERVER
 const { API_PORT } = process.env;
