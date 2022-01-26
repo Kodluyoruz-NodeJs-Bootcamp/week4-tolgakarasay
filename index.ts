@@ -12,22 +12,15 @@ import pageRoute from './routes/pageRoute';
 
 const app = express();
 
-// MIDDLEWARES
-app.use(express.static('public'));
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-
-// TEMPLATE ENGINE
-app.set('view engine', 'ejs');
-
-// ROUTES
-app.use('/', pageRoute);
-app.use('/', userRoute);
-
 (async () => {
   // DB CONNECTION
   await createConnection();
+
+  // MIDDLEWARES
+  app.use(express.static('public'));
+  app.use(express.json({ limit: '50mb' }));
+  app.use(express.urlencoded({ extended: true }));
+  app.use(cookieParser());
 
   // SESSION
   app.use(
@@ -45,6 +38,13 @@ app.use('/', userRoute);
       },
     })
   );
+
+  // TEMPLATE ENGINE
+  app.set('view engine', 'ejs');
+
+  // ROUTES
+  app.use('/', pageRoute);
+  app.use('/', userRoute);
 
   // START THE SERVER
   const { API_PORT } = process.env;
