@@ -2,11 +2,10 @@ import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { RequestHandler } from 'express';
 import 'reflect-metadata';
-import { createConnection } from 'typeorm';
 import { User } from '../entity/User';
 import { getRepository } from 'typeorm';
 
-// Add extra variables to express session
+// Add extra variables to SessionData
 declare module 'express-session' {
   interface SessionData {
     browser: String;
@@ -25,10 +24,8 @@ export const registerUser: RequestHandler = async (req, res) => {
       res.status(400).send('All input is required');
     }
 
-    // Check if user already exists
-    // Validate if user exist in our database
+    // Check if user already exists in the database
     const oldUser = await getRepository(User).findOne({ username });
-
     if (oldUser) {
       return res.status(409).render('signup', { str: 'User already exists!' });
     }
@@ -36,15 +33,18 @@ export const registerUser: RequestHandler = async (req, res) => {
     // Encrypt user password
     const encryptedPassword = await bcrypt.hash(password, 10);
 
-    const user = await getRepository(User).create({
+    // Create new user
+    const user = getRepository(User).create({
       name,
       surname,
       username,
       password: encryptedPassword,
     });
 
+    // Save new user to database
     await getRepository(User).save(user);
-    // redirect new user to login page
+
+    // Redirect new user to login page
     return res.status(201).render('login', {
       str: 'You have been succesfully registered. Please login.',
     });
@@ -53,7 +53,7 @@ export const registerUser: RequestHandler = async (req, res) => {
   }
 };
 
-// this function is invoked when user tries to login
+// This function is invoked when user tries to login
 export const checkUser: RequestHandler = async (req, res) => {
   try {
     // Get user input at login page
@@ -63,11 +63,9 @@ export const checkUser: RequestHandler = async (req, res) => {
     if (!(username && password)) {
       res.status(400).send('All input is required');
     }
-    // Validate if user exists in the database
-
-    const user = await getRepository(User).findOne({ username });
 
     // If user exists and password matches, create token
+    const user = await getRepository(User).findOne({ username });
     if (user && (await bcrypt.compare(password, user.password))) {
       const token = jwt.sign(
         { id: user.id, browser: req.headers['user-agent'] },
@@ -82,7 +80,7 @@ export const checkUser: RequestHandler = async (req, res) => {
         httpOnly: true,
       });
 
-      // user session
+      // keep user's id and browser info in session
       req.session.userID = user.id;
       req.session.browser = req.headers['user-agent'];
 
@@ -108,6 +106,7 @@ export const logoutUser: RequestHandler = (req, res) => {
     if (err) {
       console.log(err);
     } else {
+      res.clearCookie('access_token');
       res.redirect('/login');
     }
   });
