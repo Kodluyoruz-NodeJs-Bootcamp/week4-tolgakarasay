@@ -1,11 +1,14 @@
-import User from '../models/User';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import * as bcrypt from 'bcryptjs';
+import * as jwt from 'jsonwebtoken';
 import { RequestHandler } from 'express';
+import 'reflect-metadata';
+import { createConnection } from 'typeorm';
+import { User } from '../entity/User';
+import { getRepository } from 'typeorm';
 
 // Add extra variables to express session
 declare module 'express-session' {
-  interface Session {
+  interface SessionData {
     browser: String;
     userID: String;
   }
@@ -24,7 +27,7 @@ export const registerUser: RequestHandler = async (req, res) => {
 
     // Check if user already exists
     // Validate if user exist in our database
-    const oldUser = await User.findOne({ username });
+    const oldUser = await getRepository(User).findOne({ username });
 
     if (oldUser) {
       return res.status(409).render('signup', { str: 'User already exists!' });
@@ -33,14 +36,14 @@ export const registerUser: RequestHandler = async (req, res) => {
     // Encrypt user password
     const encryptedPassword = await bcrypt.hash(password, 10);
 
-    // Create user in our database
-    const user = await User.create({
+    const user = await getRepository(User).create({
       name,
       surname,
-      username: username,
+      username,
       password: encryptedPassword,
     });
 
+    await getRepository(User).save(user);
     // redirect new user to login page
     return res.status(201).render('login', {
       str: 'You have been succesfully registered. Please login.',
@@ -61,32 +64,30 @@ export const checkUser: RequestHandler = async (req, res) => {
       res.status(400).send('All input is required');
     }
     // Validate if user exists in the database
-    const user = await User.findOne({ username });
+
+    const user = await getRepository(User).findOne({ username });
 
     // If user exists and password matches, create token
     if (user && (await bcrypt.compare(password, user.password))) {
       const token = jwt.sign(
-        { id: user._id, browser: req.headers['user-agent'] },
+        { id: user.id, browser: req.headers['user-agent'] },
         process.env.TOKEN_KEY,
         {
           expiresIn: '5m',
         }
       );
 
-      // save user token
-      user.token = token;
-
-      // user session
-      req.session.userID = user._id;
-      req.session.browser = req.headers['user-agent'];
-
       // set cookie
       res.cookie('access_token', token, {
         httpOnly: true,
       });
 
+      // user session
+      req.session.userID = user.id;
+      req.session.browser = req.headers['user-agent'];
+
       // Route authenticated user to welcome page
-      return res.status(200).render('welcome', { user });
+      return res.status(200).render('welcome', { user, token });
     } else {
       res.status(400).render('login', { str: 'Invalid credentials!' });
     }
@@ -97,8 +98,8 @@ export const checkUser: RequestHandler = async (req, res) => {
 
 // this function is invoked to list all users in the database
 export const listUsers: RequestHandler = async (req, res) => {
-  const users = await User.find();
-  res.render('userlist', { users });
+  const allUsers = await getRepository(User).find();
+  res.render('userlist', { allUsers });
 };
 
 // this function is invoked when user clicks on logout button.

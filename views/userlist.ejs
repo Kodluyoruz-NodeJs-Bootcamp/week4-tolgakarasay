@@ -18,10 +18,10 @@
                     <h1>Users in the database:</h1>
 
                     <ul>
-                        <% for(let i=0; i<users.length; i++){ %>
+                        <% for(let i=0; i<allUsers.length; i++){ %>
                             <li>
-                                <%= users[i].username %> (<%= users[i].name %>
-                                        <%= users[i].surname %>)
+                                <%= allUsers[i].username %> (<%= allUsers[i].name %>
+                                        <%= allUsers[i].surname %>)
                             </li>
                             <% } %>
                     </ul>

@@ -18,7 +18,11 @@ declare module 'express-session' {
 
 // this middleware function is invoked to authenticate the user
 const verifyToken: RequestHandler = (req, res, next) => {
-  const token = req.cookies.access_token;
+  // BURAYA BAKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+  let token;
+  if (req.cookies) {
+    token = req.cookies.access_token;
+  }
 
   // check if there is a token in the cookie
   if (!token) {

@@ -1,9 +1,8 @@
 // DB CONNECTION
-import mongoose from 'mongoose';
+import { createConnection } from 'typeorm';
 
 export const connect = () => {
-  mongoose
-    .connect(process.env.MONGO_URI)
+  createConnection()
     .then(() => {
       console.log('Database connection successful');
     })
