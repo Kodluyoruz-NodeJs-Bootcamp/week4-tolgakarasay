@@ -7,6 +7,7 @@ import {
 } from '../controllers/pageController';
 import auth from '../middlewares/authMiddleware';
 
+// page routes
 router.route('/login').get(getLoginPage);
 router.route('/signup').get(getSignupPage);
 router.route('/').get(auth, getIndexPage);
