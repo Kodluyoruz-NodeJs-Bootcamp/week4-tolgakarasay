@@ -8,9 +8,9 @@ interface MyToken {
   browser: string;
 }
 
-// add new parameters to session
+// Add extra variables to SessionData
 declare module 'express-session' {
-  interface Session {
+  interface SessionData {
     browser: String;
     userID: String;
   }
@@ -18,18 +18,14 @@ declare module 'express-session' {
 
 // this middleware function is invoked to authenticate the user
 const verifyToken: RequestHandler = (req, res, next) => {
-  // BURAYA BAKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
-  let token;
-  if (req.cookies) {
-    token = req.cookies.access_token;
-  }
-
   // check if there is a token in the cookie
+  const token = req.cookies.access_token;
   if (!token) {
     return res
       .status(403)
       .render('login', { str: 'Token not found! Login to gain access.' });
   }
+
   try {
     // Decode the token
     const decoded = jwtDecode<MyToken>(token);
@@ -39,7 +35,6 @@ const verifyToken: RequestHandler = (req, res, next) => {
       decoded.id == req.session.userID &&
       decoded.browser == req.headers['user-agent']
     ) {
-      res.locals.id = decoded.id;
       return next();
     }
     return res
