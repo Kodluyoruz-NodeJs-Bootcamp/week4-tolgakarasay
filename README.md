@@ -50,7 +50,7 @@ npm start
 or with ts-node.
 
 ```
-npx ts-node app.ts
+npx ts-node index.ts
 ```
 
 #
